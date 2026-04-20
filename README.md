@@ -47,6 +47,6 @@ The **AI Brand Identity Assistant** is a conversational AI system that simplifie
 
 ---
 
-### 1️⃣ Clone the Repository
+###  Clone the Repository
 ```bash
 git clone https://github.com/Gaurav-Datir/AI-Brand-Identity-Assistant-Ai-chatbot-.git
