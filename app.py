@@ -7,20 +7,13 @@ from dotenv import load_dotenv
 from fpdf import FPDF
 from groq import Groq
 
-# ---------------------------
-# Load ENV
-# ---------------------------
+
 load_dotenv()
 
-# ---------------------------
-# Groq Setup
-# ---------------------------
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 MODEL = "llama-3.3-70b-versatile"   # ✅ stable + free
 
-# ---------------------------
-# Data Setup
-# ---------------------------
+
 DATA_FILE = "data/projects.json"
 os.makedirs("data", exist_ok=True)
 
@@ -29,9 +22,6 @@ if not os.path.exists(DATA_FILE):
     with open(DATA_FILE, "w") as f:
         json.dump([], f)
 
-# ---------------------------
-# Save Project
-# ---------------------------
 def save_project(data):
     with open(DATA_FILE, "r+") as f:
         projects = json.load(f)
@@ -39,15 +29,10 @@ def save_project(data):
         f.seek(0)
         json.dump(projects, f, indent=4)
 
-# ---------------------------
-# Clean Text (Fix PDF crash)
-# ---------------------------
 def clean_text(text):
     return re.sub(r'[^\x00-\xFF]+', '', text)
 
-# ---------------------------
-# Generate PDF
-# ---------------------------
+
 def generate_pdf(content, filename="brand_identity.pdf"):
     pdf = FPDF()
     pdf.add_page()
@@ -61,9 +46,7 @@ def generate_pdf(content, filename="brand_identity.pdf"):
     pdf.output(filename)
     return filename
 
-# ---------------------------
-# Groq API Call
-# ---------------------------
+
 def ask_groq(prompt):
     try:
         response = client.chat.completions.create(
@@ -84,9 +67,7 @@ def ask_groq(prompt):
     except Exception as e:
         return f"Error: {str(e)}"
 
-# ---------------------------
-# Chat Start
-# ---------------------------
+
 @cl.on_chat_start
 async def start():
     cl.user_session.set("step", 0)
@@ -96,9 +77,6 @@ async def start():
         content="👋 Welcome to AI Brand Identity Assistant \n\nWhat is your brand name?"
     ).send()
 
-# ---------------------------
-# Chat Flow
-# ---------------------------
 @cl.on_message
 async def main(message: cl.Message):
     step = cl.user_session.get("step")
